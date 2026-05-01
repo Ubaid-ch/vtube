@@ -55,8 +55,15 @@ api.interceptors.response.use(
       } catch (refreshError) {
         processQueue(refreshError);
         
-        // Only redirect if NOT on auth page
-        if (!isAuthPage && typeof window !== "undefined") {
+        const isPublicPage = typeof window !== "undefined" && (
+          window.location.pathname === "/" ||
+          window.location.pathname === "/login" ||
+          window.location.pathname === "/register" ||
+          window.location.pathname.startsWith("/watch/") ||
+          window.location.pathname.startsWith("/channel/")
+        );
+
+        if (!isPublicPage && typeof window !== "undefined") {
           window.location.href = "/login";
         }
         
